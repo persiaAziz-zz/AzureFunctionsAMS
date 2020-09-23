@@ -1,0 +1,20 @@
+{
+        "contentType": "Prometheus",
+        "checks": [
+                {
+                        "name": "PrometheusNodeExporter",
+                        "description": "Export data from the prometheus node_exporter",
+                        "customLog": "Prometheus_NodeExporter",
+                        "frequencySecs": 15,
+                        "actions": [
+                            {
+                                "type": "FetchMetrics",
+                                "parameters": {
+                                    "includePrefixes": "^node_",
+                                    "suppressIfZeroPrefixes": "node_(?:systemd_unit_state)"
+                                }
+                            }
+                        ]
+                }
+        ]
+}

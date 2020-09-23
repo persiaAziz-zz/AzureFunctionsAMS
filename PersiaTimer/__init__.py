@@ -1,7 +1,7 @@
 import datetime
 
-from helper.context import *
-from helper.tracing import *
+from ..shared_code import context
+from ..shared_code import tracing
 
 import azure.functions as func
 
@@ -9,7 +9,7 @@ import azure.functions as func
 def main(mytimer: func.TimerRequest) -> None:
 
     tracer = tracing.initTracer()
-    ctx = Context(tracer, "monitor")
+    ctx = context.Context(tracer, "monitor")
     utc_timestamp = datetime.datetime.utcnow().replace(
         tzinfo=datetime.timezone.utc).isoformat()
 

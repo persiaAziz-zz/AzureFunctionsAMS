@@ -12,7 +12,7 @@ import re
 import sys
 
 # Payload modules
-from helper.tracing import *
+from shared_code.tracing import *
 
 # Internal context handler
 class Context(object):

@@ -1,19 +1,13 @@
 # Python modules
-from datetime import datetime,timezone
-import json
-import logging
+from datetime import timezone
 import uuid
-import re
 import urllib
-import requests
-from requests.exceptions import Timeout
 
 # Payload modules
-from const import PAYLOAD_VERSION
-from helper.context import *
-from helper.tools import JsonEncoder
+from shared_code.context import *
+from shared_code.tools import JsonEncoder
 from provider.base import ProviderInstance, ProviderCheck
-from typing import Dict, List
+from typing import Dict
 
 # provider specific modules
 from prometheus_client.samples import Sample

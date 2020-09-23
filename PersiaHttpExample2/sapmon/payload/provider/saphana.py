@@ -1,15 +1,9 @@
 # Python modules
-import hashlib
-import json
-import logging
-import re
 import time
 
 # Payload modules
-from const import *
-from helper.azure import *
-from helper.context import *
-from helper.tools import *
+from shared_code.context import *
+from shared_code.tools import *
 from provider.base import ProviderInstance, ProviderCheck
 from typing import Dict, List
 

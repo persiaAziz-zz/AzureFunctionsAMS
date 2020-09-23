@@ -1,18 +1,13 @@
 # Azure modules
-from azure.mgmt.storage import StorageManagementClient
 from azure_storage_logging.handlers import QueueStorageHandler
 
 # Python modules
 import argparse
 from collections import OrderedDict
-import json
-import logging
 import logging.config
-from typing import Callable, Dict, Optional
 
 # Payload modules
-from const import *
-from helper.azure import *
+from shared_code.azure import *
 
 # Formats a log/trace payload as JSON-formatted string
 class JsonFormatter(logging.Formatter):

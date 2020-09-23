@@ -1,15 +1,12 @@
 # Python modules
 from abc import ABC, abstractmethod
-from datetime import date, datetime, timedelta
-import json
-import logging
+from datetime import timedelta
 from retry.api import retry_call
-from typing import Callable, Dict, List, Optional
+from typing import List
 
 # Payload modules
-from const import *
-from helper.context import *
-from helper.tools import *
+from shared_code.context import *
+from shared_code.tools import *
 
 ###############################################################################
 
@@ -50,7 +47,7 @@ class ProviderInstance(ABC):
 
    # Read provider content file
    def initContent(self) -> bool:
-      from helper.providerfactory import ProviderFactory
+      from shared_code.providerfactory import ProviderFactory
 
       self.tracer.info("[%s] initializing content for provider instance" % self.fullName)
       try:

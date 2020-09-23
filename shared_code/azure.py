@@ -8,15 +8,11 @@ from azure.keyvault.secrets import SecretClient, KeyVaultSecret
 import base64
 import hashlib
 import hmac
-import json
-import logging
-import requests
 import sys
-from typing import Callable, Dict, Optional, Tuple
+from typing import Tuple
 
 # Payload modules
-from const import *
-from helper.tools import *
+from shared_code.tools import *
 
 ###############################################################################
 

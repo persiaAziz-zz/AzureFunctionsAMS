@@ -13,6 +13,8 @@ import sys
 
 # Payload modules
 from . import tracing
+from . import const
+from . import azure
 
 # Internal context handler
 class Context(object):
@@ -33,19 +35,19 @@ class Context(object):
       self.tracer.info("initializing context")
 
       # Retrieve sapmonId via IMDS
-      self.vmInstance = AzureInstanceMetadataService.getComputeInstance(self.tracer,
+      self.vmInstance = azure.AzureInstanceMetadataService.getComputeInstance(self.tracer,
                                                                         operation)
       vmName = self.vmInstance.get("name", None)
       if not vmName:
          self.tracer.critical("could not obtain VM name from IMDS")
-         sys.exit(ERROR_GETTING_SAPMONID)
+         sys.exit(const.ERROR_GETTING_SAPMONID)
       try:
          self.sapmonId = re.search("sapmon-vm-(.*)", vmName).group(1)
       except AttributeError:
          self.tracer.critical("could not extract sapmonId from VM name")
-         sys.exit(ERROR_GETTING_SAPMONID)
+         sys.exit(const.ERROR_GETTING_SAPMONID)
 
-      self.authToken, self.msiClientId = AzureInstanceMetadataService.getAuthToken(self.tracer)
+      self.authToken, self.msiClientId = azure.AzureInstanceMetadataService.getAuthToken(self.tracer)
 
       self.tracer.debug("sapmonId=%s" % self.sapmonId)
       self.tracer.debug("msiClientId=%s" % self.msiClientId)
@@ -57,10 +59,10 @@ class Context(object):
       self.analyticsTracer = tracing.initCustomerAnalyticsTracer(self.tracer, self)
 
       # Get KeyVault
-      self.azKv = AzureKeyVault(self.tracer,
-                                KEYVAULT_NAMING_CONVENTION % self.sapmonId,
+      self.azKv = azure.AzureKeyVault(self.tracer,
+                                const.KEYVAULT_NAMING_CONVENTION % self.sapmonId,
                                 msiClientId = self.msiClientId)
       if not self.azKv.exists():
-         sys.exit(ERROR_KEYVAULT_NOT_FOUND)
+         sys.exit(const.ERROR_KEYVAULT_NOT_FOUND)
 
       self.tracer.info("successfully initialized context")

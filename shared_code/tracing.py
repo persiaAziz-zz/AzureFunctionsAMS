@@ -107,7 +107,7 @@ class tracing:
 
    # Initialize the tracer object
    @staticmethod
-   def initTracer(args: argparse.Namespace) -> logging.Logger:
+   def initTracer() -> logging.Logger:
       tracing.config["handlers"]["console"]["formatter"] = "detailed"
       tracing.config["handlers"]["console"]["level"] = logging.DEBUG
       logging.config.dictConfig(tracing.config)

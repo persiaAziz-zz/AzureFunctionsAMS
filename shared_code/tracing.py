@@ -61,7 +61,7 @@ class tracing:
        "disable_existing_loggers": True,
        "formatters": {
            "json": {
-               "class": "helper.tracing.JsonFormatter",
+               "class": "JsonFormatter",
                "fieldMapping": {
                    "pid": "process",
                    "timestamp": "asctime",

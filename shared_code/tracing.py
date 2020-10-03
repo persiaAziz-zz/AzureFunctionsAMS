@@ -67,7 +67,6 @@ class tracing:
                    "module": "filename",
                    "lineNum": "lineno",
                    "function": "funcName",
-                   # Custom (payload-specific) fields below
                    "payloadVersion": "payloadversion",
                    "sapmonId": "sapmonid"
                }

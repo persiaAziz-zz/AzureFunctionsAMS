@@ -8,7 +8,7 @@ from typing import Callable, Dict, Optional
 from binascii import hexlify
 
 # Payload modules
-from shared_code.const import *
+from .const import *
 
 ###############################################################################
 

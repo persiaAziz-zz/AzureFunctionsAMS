@@ -12,7 +12,7 @@ import sys
 from typing import Tuple
 
 # Payload modules
-from shared_code.tools import *
+from .tools import *
 
 ###############################################################################
 

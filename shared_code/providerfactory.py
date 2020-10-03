@@ -1,6 +1,6 @@
 import logging
 
-from shared_code.context import *
+from .context import *
 from provider.saphana import *
 from provider.prometheus import *
 from provider.sqlserver import *

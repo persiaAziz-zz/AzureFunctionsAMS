@@ -10,7 +10,7 @@ import logging.config
 # Payload modules
 from .azure import *
 from .const import *
-from .const import JsonFormatter
+#from .const import JsonFormatter
 
 # Helper class to enable all kinds of tracing
 class tracing:
@@ -19,7 +19,7 @@ class tracing:
        "disable_existing_loggers": True,
        "formatters": {
            "json": {
-               "class": "JsonFormatter",
+               "class": "__app__.shared_code.const.JsonFormatter",
                "fieldMapping": {
                    "pid": "process",
                    "timestamp": "asctime",

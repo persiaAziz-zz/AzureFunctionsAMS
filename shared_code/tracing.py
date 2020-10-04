@@ -4,55 +4,13 @@ from azure_storage_logging.handlers import QueueStorageHandler
 
 # Python modules
 import argparse
-from collections import OrderedDict
+# from collections import OrderedDict
 import logging.config
 
 # Payload modules
 from .azure import *
 from .const import *
-
-# Formats a log/trace payload as JSON-formatted string
-class JsonFormatter(logging.Formatter):
-   def __init__(self,
-                fieldMapping: Dict[str, str] = {},
-                datefmt: Optional[str] = None,
-                customJson: Optional[json.JSONEncoder] = None):
-      logging.Formatter.__init__(self, None, datefmt)
-      self.fieldMapping = fieldMapping
-      self.customJson = customJson
-
-   # Overridden from the parent class to look for the asctime attribute in the fields attribute
-   def usesTime(self) -> bool:
-      return "asctime" in self.fieldMapping.values()
-
-   # Formats time using a specific date format
-   def _formatTime(self,
-                   record: logging.LogRecord) -> None:
-      if self.usesTime():
-         record.asctime = self.formatTime(record, self.datefmt)
-
-   # Combines any supplied fields with the log record msg field into an object to convert to JSON
-   def _getJsonData(self,
-                    record: logging.LogRecord) -> OrderedDict():
-      if len(self.fieldMapping.keys()) > 0:
-         # Build a temporary list of tuples with the actual content for each field
-         jsonContent = []
-         for f in sorted(self.fieldMapping.keys()):
-            jsonContent.append((f, getattr(record, self.fieldMapping[f])))
-         jsonContent.append(("msg", record.msg))
-
-         # An OrderedDict is used to ensure that the converted data appears in the same order for every record
-         return OrderedDict(jsonContent)
-      else:
-         return record.msg
-
-   # Overridden from the parent class to take a log record and output a JSON-formatted string
-   def format(self,
-              record: logging.LogRecord) -> str:
-      self._formatTime(record)
-      jsonData = self._getJsonData(record)
-      formattedJson = json.dumps(jsonData, cls=self.customJson)
-      return formattedJson
+from .const import JsonFormatter
 
 # Helper class to enable all kinds of tracing
 class tracing:

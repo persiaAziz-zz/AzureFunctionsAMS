@@ -3,5 +3,15 @@
   "extensionBundle": {
     "id": "Microsoft.Azure.Functions.ExtensionBundle",
     "version": "[1.*, 2.0.0)"
-  }
+  },
+  "logging": {
+    "fileLoggingMode": "always",
+    "logLevel": {
+      "Function.MyFunction": "Information",
+      "default": "None"
+    },
+    "console": {
+      "isEnabled": "true"
+    }
+   }
 }

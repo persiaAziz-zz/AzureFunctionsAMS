@@ -49,18 +49,10 @@ class tracing:
                "formatter": "simple",
                "level": DEFAULT_CONSOLE_TRACE_LEVEL
            },
-           "file": {
-               "class": "logging.handlers.RotatingFileHandler",
-               "formatter": "detailed",
-               "level": DEFAULT_FILE_TRACE_LEVEL,
-               "filename": FILENAME_TRACE,
-               "maxBytes": 10000000,
-               "backupCount": 10
-           },
        },
        "root": {
            "level": logging.DEBUG,
-           "handlers": ["console", "file"]
+           "handlers": ["console"]
        }
    }
 

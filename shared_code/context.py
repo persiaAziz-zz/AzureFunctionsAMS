@@ -14,8 +14,10 @@ import os
 
 # Payload modules
 from __app__.shared_code.tracing import *
-from __app__.shared_code.const import *
-from __app__.shared_code.azure import *
+from __app__.shared_code import azure, const
+
+# from shared_code import azure, const
+# from shared_code.tracing import *
 
 # Internal context handler
 class Context(object):

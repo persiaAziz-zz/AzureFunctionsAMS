@@ -9,6 +9,7 @@ import base64
 import hashlib
 import hmac
 import sys
+import os
 from typing import Tuple
 
 # Payload modules
@@ -63,10 +64,7 @@ class AzureInstanceMetadataService:
       if not resource:
          resource = AzureInstanceMetadataService.resource
       try:
-         result = AzureInstanceMetadataService._sendRequest(tracer,
-                                                            "identity/oauth2/token",
-                                                            params = {"resource": resource, "client_id": msiClientId})
-         authToken, msiClientId = result["access_token"], result["client_id"]
+         msiClientId = os.environ["MSI_CLIENT_ID"]
       except Exception as e:
          tracer.critical("could not get auth token (%s)" % e)
          sys.exit(ERROR_GETTING_AUTH_TOKEN)
@@ -237,7 +235,6 @@ class AzureStorageQueue():
     def __init__(self,
                  tracer: logging.Logger,
                  sapmonId: str,
-                 authToken: str,
                  subscriptionId: str,
                  resourceGroup: str,
                  queueName: str):
@@ -245,21 +242,18 @@ class AzureStorageQueue():
         self.tracer.info("initializing Storage Queue instance")
         self.accountName = STORAGE_ACCOUNT_NAMING_CONVENTION % sapmonId
         self.name = queueName
-        
-        self.token["access_token"] = authToken
+
         self.subscriptionId = subscriptionId
         self.resourceGroup = resourceGroup
 
     # Get the access key to the storage queue
     def getAccessKey(self) -> str:
         self.tracer.info("getting access key for Storage Queue")
-        storageclient = StorageManagementClient(credentials = BasicTokenAuthentication(self.token),
-                                                subscription_id = self.subscriptionId)
-
-        # Retrieve keys from storage accounts
-        storageKeys = storageclient.storage_accounts.list_keys(resource_group_name = self.resourceGroup,
-                                                               account_name = self.accountName)
-        if storageKeys is None or len(storageKeys.keys) == 0 :
-           self.log.error("could not retrieve storage keys of the storage account %s" % self.accountName)
-           return None
-        return storageKeys.keys[0].value
+        accesskey = None
+        # get accesskey from the evironment variable
+        connectionString = os.environ["AzureWebJobsStorage"]
+        stoStrings = connectionString.split(';')
+        for part in stoStrings:
+            if part.startswith("AccountKey"):
+                accesskey = part[11:]
+        return accesskey

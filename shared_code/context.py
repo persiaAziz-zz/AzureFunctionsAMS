@@ -51,7 +51,7 @@ class Context(object):
          self.tracer.critical("could not extract sapmonId from VM name")
          sys.exit(const.ERROR_GETTING_SAPMONID)
 
-      self.authToken, self.msiClientId = azure.AzureInstanceMetadataService.getAuthToken(self.tracer)
+      self.msiClientId = os.environ["MSI_CLIENT_ID"]
 
       self.tracer.debug("sapmonId=%s" % self.sapmonId)
       self.tracer.debug("msiClientId=%s" % self.msiClientId)

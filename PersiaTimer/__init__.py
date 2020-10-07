@@ -117,7 +117,7 @@ def main(mytimer: func.TimerRequest) -> None:
     global ctx, tracer
     tracer = tracing.initTracer()
     ctx = context.Context(tracer, "monitor")
-    utc_timestamp = datetime.datetime.utcnow().replace(
+    utc_timestamp = datetime.utcnow().replace(
         tzinfo=datetime.timezone.utc).isoformat()
 
     if mytimer.past_due:

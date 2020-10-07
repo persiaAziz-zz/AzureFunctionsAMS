@@ -4,8 +4,8 @@ import uuid
 import urllib
 
 # Payload modules
-from shared_code.context import *
-from shared_code.tools import JsonEncoder
+from .context import *
+from .tools import JsonEncoder
 from . import const
 from .base import ProviderInstance, ProviderCheck
 from typing import Dict

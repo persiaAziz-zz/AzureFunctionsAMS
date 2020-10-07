@@ -39,7 +39,7 @@ class ProviderInstanceThread(threading.Thread):
          # Ingest result into Customer Analytics
          enableCustomerAnalytics = ctx.globalParams.get("enableCustomerAnalytics", True)
          if enableCustomerAnalytics and check.includeInCustomerAnalytics:
-             tracing.ingestCustomerAnalytics(tracer,
+             tracing.tracing.ingestCustomerAnalytics(tracer,
                                              ctx,
                                              check.customLog,
                                              resultJson)
@@ -115,7 +115,7 @@ def monitor() -> None:
 
 def main(mytimer: func.TimerRequest) -> None:
     global ctx, tracer
-    tracer = tracing.tracing.initTracer()
+    tracer = tracing.initTracer()
     ctx = context.Context(tracer, "monitor")
     utc_timestamp = datetime.datetime.utcnow().replace(
         tzinfo=datetime.timezone.utc).isoformat()

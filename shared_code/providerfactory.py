@@ -3,12 +3,12 @@ import logging
 from .context import *
 from .saphana import *
 from .prometheus import *
-from .sqlserver import *
+#from .sqlserver import *
 from .base import *
 
 availableProviders = {
                         "SapHana": (saphanaProviderInstance, saphanaProviderCheck),
-                        "MsSqlServer": (MSSQLProviderInstance, MSSQLProviderCheck),
+#                        "MsSqlServer": (MSSQLProviderInstance, MSSQLProviderCheck),
                         "PrometheusGeneric": (prometheusProviderInstance, prometheusProviderCheck),
                         "PrometheusHaCluster": (prometheusProviderInstance, prometheusProviderCheck),
                         "PrometheusNode": (prometheusProviderInstance, prometheusProviderCheck),

@@ -9,4 +9,5 @@ azure-keyvault-secrets
 azure-identity
 prometheus_client
 retry
+hdbcli
 pyodbc

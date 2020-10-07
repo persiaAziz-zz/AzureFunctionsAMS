@@ -13,8 +13,8 @@ import sys
 import os
 
 # Payload modules
-from __app__.shared_code.tracing import *
-from __app__.shared_code import azure, const
+from _app_.shared_code.tracing import *
+from _app_.shared_code import azure, const
 
 # from shared_code import azure, const
 # from shared_code.tracing import *

@@ -1,9 +1,10 @@
 import logging
 
 from .context import *
-from provider.saphana import *
-from provider.prometheus import *
-from provider.sqlserver import *
+from .saphana import *
+from .prometheus import *
+from .sqlserver import *
+from .base import *
 
 availableProviders = {
                         "SapHana": (saphanaProviderInstance, saphanaProviderCheck),

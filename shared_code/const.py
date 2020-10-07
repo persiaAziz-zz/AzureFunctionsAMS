@@ -12,7 +12,7 @@ PAYLOAD_VERSION = "2.4"
 # Default file/directory locations
 PATH_PAYLOAD       = os.path.dirname(os.path.realpath(__file__))
 PATH_ROOT          = os.path.abspath(os.path.join(PATH_PAYLOAD, "../PersiaHttpExample2/sapmon/payload"))
-PATH_CONTENT       = os.path.join(PATH_ROOT, "content")
+PATH_CONTENT       = os.path.join(".", "content")
 PATH_TRACE         = os.path.join(PATH_ROOT, "trace")
 PATH_STATE         = os.path.join(PATH_ROOT, "state")
 FILENAME_TRACE     = os.path.join(PATH_TRACE, "sapmon.trc")

@@ -117,11 +117,11 @@ def main(mytimer: func.TimerRequest) -> None:
     global ctx, tracer
     tracer = tracing.initTracer()
     ctx = context.Context(tracer, "monitor")
-    utc_timestamp = datetime.utcnow().replace(
-        tzinfo=datetime.timezone.utc).isoformat()
-
-    if mytimer.past_due:
-        tracer.info('Persia test The timer is past due!')
+    # utc_timestamp = datetime.utcnow().replace(
+    #     tzinfo=datetime.timezone.utc).isoformat()
+    #
+    # if mytimer.past_due:
+    #     tracer.info('Persia test The timer is past due!')
 
     monitor()
-    tracer.info('Persia\'s Python timer trigger function ran at %s', utc_timestamp)
+    tracer.info('Persia\'s Python timer trigger function ran at ')

@@ -1,13 +1,17 @@
 # Python modules
-from datetime import timezone
+from datetime import timezone, datetime
 import uuid
 import urllib
 
 # Payload modules
-from shared_code.context import *
-from shared_code.tools import JsonEncoder
-from provider.base import ProviderInstance, ProviderCheck
+from .context import *
+from .tools import JsonEncoder
+from . import const
+from .base import ProviderInstance, ProviderCheck
 from typing import Dict
+import logging
+import requests
+import json
 
 # provider specific modules
 from prometheus_client.samples import Sample
@@ -187,7 +191,7 @@ class prometheusProviderCheck(ProviderCheck):
         resultSet.append(prometheusSample2Dict(
             Sample("sapmon",
                    {
-                       "SAPMON_VERSION": PAYLOAD_VERSION,
+                       "SAPMON_VERSION": const.PAYLOAD_VERSION,
                        "PROVIDER_INSTANCE": self.providerInstance.name
                    }, 1)))
         # Convert temporary dictionary into JSON string

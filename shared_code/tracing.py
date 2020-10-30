@@ -1,56 +1,16 @@
 # Azure modules
 from azure_storage_logging.handlers import QueueStorageHandler
 
+
 # Python modules
 import argparse
-from collections import OrderedDict
+# from collections import OrderedDict
 import logging.config
 
 # Payload modules
-from shared_code.azure import *
-
-# Formats a log/trace payload as JSON-formatted string
-class JsonFormatter(logging.Formatter):
-   def __init__(self,
-                fieldMapping: Dict[str, str] = {},
-                datefmt: Optional[str] = None,
-                customJson: Optional[json.JSONEncoder] = None):
-      logging.Formatter.__init__(self, None, datefmt)
-      self.fieldMapping = fieldMapping
-      self.customJson = customJson
-
-   # Overridden from the parent class to look for the asctime attribute in the fields attribute
-   def usesTime(self) -> bool:
-      return "asctime" in self.fieldMapping.values()
-
-   # Formats time using a specific date format
-   def _formatTime(self,
-                   record: logging.LogRecord) -> None:
-      if self.usesTime():
-         record.asctime = self.formatTime(record, self.datefmt)
-
-   # Combines any supplied fields with the log record msg field into an object to convert to JSON
-   def _getJsonData(self,
-                    record: logging.LogRecord) -> OrderedDict():
-      if len(self.fieldMapping.keys()) > 0:
-         # Build a temporary list of tuples with the actual content for each field
-         jsonContent = []
-         for f in sorted(self.fieldMapping.keys()):
-            jsonContent.append((f, getattr(record, self.fieldMapping[f])))
-         jsonContent.append(("msg", record.msg))
-
-         # An OrderedDict is used to ensure that the converted data appears in the same order for every record
-         return OrderedDict(jsonContent)
-      else:
-         return record.msg
-
-   # Overridden from the parent class to take a log record and output a JSON-formatted string
-   def format(self,
-              record: logging.LogRecord) -> str:
-      self._formatTime(record)
-      jsonData = self._getJsonData(record)
-      formattedJson = json.dumps(jsonData, cls=self.customJson)
-      return formattedJson
+from .azure import *
+from .const import *
+#from .const import JsonFormatter
 
 # Helper class to enable all kinds of tracing
 class tracing:
@@ -59,7 +19,7 @@ class tracing:
        "disable_existing_loggers": True,
        "formatters": {
            "json": {
-               "class": "helper.tracing.JsonFormatter",
+               "class": "__app__.shared_code.const.JsonFormatter",
                "fieldMapping": {
                    "pid": "process",
                    "timestamp": "asctime",
@@ -67,7 +27,6 @@ class tracing:
                    "module": "filename",
                    "lineNum": "lineno",
                    "function": "funcName",
-                   # Custom (payload-specific) fields below
                    "payloadVersion": "payloadversion",
                    "sapmonId": "sapmonid"
                }
@@ -90,27 +49,18 @@ class tracing:
                "formatter": "simple",
                "level": DEFAULT_CONSOLE_TRACE_LEVEL
            },
-           "file": {
-               "class": "logging.handlers.RotatingFileHandler",
-               "formatter": "detailed",
-               "level": DEFAULT_FILE_TRACE_LEVEL,
-               "filename": FILENAME_TRACE,
-               "maxBytes": 10000000,
-               "backupCount": 10
-           },
        },
        "root": {
            "level": logging.DEBUG,
-           "handlers": ["console", "file"]
+           "handlers": ["console"]
        }
    }
 
    # Initialize the tracer object
    @staticmethod
-   def initTracer(args: argparse.Namespace) -> logging.Logger:
-      if args.verbose:
-         tracing.config["handlers"]["console"]["formatter"] = "detailed"
-         tracing.config["handlers"]["console"]["level"] = logging.DEBUG
+   def initTracer() -> logging.Logger:
+      tracing.config["handlers"]["console"]["formatter"] = "detailed"
+      tracing.config["handlers"]["console"]["level"] = logging.DEBUG
       logging.config.dictConfig(tracing.config)
       return logging.getLogger(__name__)
 
@@ -130,7 +80,6 @@ class tracing:
       try:
          storageQueue = AzureStorageQueue(tracer,
                                           ctx.sapmonId,
-                                          ctx.authToken,
                                           ctx.vmInstance["subscriptionId"],
                                           ctx.vmInstance["resourceGroupName"],
                                           queueName = STORAGE_QUEUE_NAMING_CONVENTION % ctx.sapmonId)
@@ -160,7 +109,6 @@ class tracing:
        try:
            storageQueue = AzureStorageQueue(tracer,
                                             ctx.sapmonId,
-                                            ctx.authToken,
                                             ctx.vmInstance["subscriptionId"],
                                             ctx.vmInstance["resourceGroupName"],
                                             CUSTOMER_METRICS_QUEUE_NAMING_CONVENTION % ctx.sapmonId)
@@ -197,10 +145,18 @@ class tracing:
    # Fetches the storage access keys from keyvault or directly from storage account
    @staticmethod
    def getAccessKeys(tracer: logging.Logger, ctx) -> str:
+      try :
+         tracer.info("fetching queue access keys from key vault")
+         kv = AzureKeyVault(tracer,
+                            KEYVAULT_NAMING_CONVENTION % ctx.sapmonId,
+                            ctx.msiClientId)
+         return kv.getSecret(STORAGE_ACCESS_KEY_NAME).value
+      except Exception as e:
+         tracer.warning("unable to get access keys from key vault, fetching from storage account (%s) " % e)
+
       tracer.info("fetching queue access keys from storage account")
       storageQueue = AzureStorageQueue(tracer,
                                        ctx.sapmonId,
-                                       ctx.authToken,
                                        ctx.vmInstance["subscriptionId"],
                                        ctx.vmInstance["resourceGroupName"],
                                        CUSTOMER_METRICS_QUEUE_NAMING_CONVENTION % ctx.sapmonId)

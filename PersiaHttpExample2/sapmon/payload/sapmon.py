@@ -7,24 +7,11 @@
 #
 
 # Python modules
-from abc import ABC, abstractmethod
-import argparse
-import json
-import os
-import re
-import sys
 import threading
-import traceback
 
 # Payload modules
-from const import *
-from helper.azure import *
-from helper.context import Context
-from helper.tools import *
-from helper.tracing import *
-from helper.providerfactory import *
-from helper.updateprofile import *
-from helper.updatefactory import *
+from shared_code.providerfactory import *
+from shared_code.updatefactory import *
 
 ###############################################################################
 

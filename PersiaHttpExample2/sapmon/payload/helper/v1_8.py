@@ -1,8 +1,6 @@
-import json
-from helper.azure import *
-from helper.context import Context
-from helper.tools import *
-from helper.updateprofile import updateProfile
+from shared_code.context import Context
+from shared_code.tools import *
+from shared_code.updateprofile import updateProfile
 
 class v1_8(updateProfile):
     # This function will configure the content of the keyvault according to the requirements of version v1.8

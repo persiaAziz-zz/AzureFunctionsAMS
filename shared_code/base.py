@@ -5,8 +5,8 @@ from retry.api import retry_call
 from typing import List
 
 # Payload modules
-from shared_code.context import *
-from shared_code.tools import *
+from .context import *
+from .tools import *
 
 ###############################################################################
 

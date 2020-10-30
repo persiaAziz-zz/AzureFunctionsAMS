@@ -1,10 +1,12 @@
 # Python modules
 import time
+import hashlib
 
 # Payload modules
-from shared_code.context import *
-from shared_code.tools import *
-from provider.base import ProviderInstance, ProviderCheck
+from .context import *
+from .tools import *
+from . import const,azure
+from .base import ProviderInstance, ProviderCheck
 from typing import Dict, List
 
 # SAP HANA modules
@@ -90,7 +92,7 @@ class saphanaProviderInstance(ProviderInstance):
 
          # Create temporary KeyVault object to fetch relevant secret
          try:
-            kv = AzureKeyVault(self.tracer,
+            kv = azure.AzureKeyVault(self.tracer,
                                kvName,
                                passwordKeyVaultMsiClientId)
          except Exception as e:
@@ -412,7 +414,7 @@ class saphanaProviderCheck(ProviderCheck):
 
       # If no probeTimeout parameter is defined for this action, use the default
       if probeTimeout is None:
-         probeTimeout = TIMEOUT_HANA_MS
+         probeTimeout = const.TIMEOUT_HANA_MS
 
       # For this check, the column storing the local UTC will be used for TimeGenerated
       self.colTimeGenerated = COL_LOCAL_UTC
